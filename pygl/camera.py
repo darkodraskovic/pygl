@@ -44,8 +44,8 @@ class Camera(transform.Transform):
     def get_view_matrix(self):
         return glm.lookAt(self.position, self.position + self.front, self.up)
 
-    def get_projection_matrix(self, scr_width, scr_height):
-        return glm.perspective(self.current_zoom, scr_width / scr_height, NEAR, FAR)
+    def get_projection_matrix(self, width, height):
+        return glm.perspective(self.current_zoom, width / height, NEAR, FAR)
 
     def update_vectors(self):
         front = glm.vec3()

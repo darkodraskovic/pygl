@@ -10,7 +10,7 @@ app.init()
 
 sh = shader.Shader('shaders/2d.vs', 'shaders/2d.fs')
 sh.use_program()
-sh.set_uniform_location("uColor")
+sh.set_uniform("uColor")
 sh.set_vec("uColor", glm.vec3(0.3, 0.7, 1))
 msh = mesh.Mesh()
 vbo = np.array([(-1, -1), (1, -1), (1, 1), (-1, 1)], dtype=np.float32)
@@ -22,7 +22,5 @@ ent = entity.Entity(sh, msh)
 ent.rotation.x = -glm.quarter_pi()
 
 app.entities.append(ent)
-# app.camera.position.y = 1
-app.camera.update_vectors()
 
 app.run()

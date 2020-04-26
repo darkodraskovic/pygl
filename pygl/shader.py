@@ -45,14 +45,8 @@ class Shader():
     def use_program(self):
         gl.glUseProgram(self.program)
 
-    def get_attrib_location(self, name):
-        return gl.glGetAttribLocation(self.program, name)
-
-    def set_uniform_location(self, name):
+    def set_uniform(self, name):
         self.uniforms[name] = gl.glGetUniformLocation(self.program, name)
-
-    def get_uniform_location(self, name):
-        return gl.glGetUniformLocation(self.program, name)
 
     def set_float(self, name, n):
         gl.glUniform1f(self.uniforms[name], n)

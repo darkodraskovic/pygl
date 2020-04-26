@@ -8,6 +8,7 @@ from pygl import camera as cam
 
 
 clock = pygame.time.Clock()
+framerate = 60
 
 position = (0, 0)
 size = (1152, 720)
@@ -40,7 +41,6 @@ def init():
 
 
 def handle_input(delta_time):
-    # key pressed
     act.handle_keys()
 
     if act.is_pressed(cam.FORWARD):
@@ -67,7 +67,6 @@ def handle_input(delta_time):
                 camera.zoom(1, delta_time)
         if event.type == pygame.MOUSEMOTION:
             camera.rotate(pygame.mouse.get_rel(), True)
-    # sys
         if event.type == pygame.QUIT:
             sys.exit()
 
@@ -86,6 +85,8 @@ def draw(delta_time):
     for e in entities:
         e.draw(proj_mat, view_mat)
 
+    pygame.display.flip()
+
 
 def run():
     global clock
@@ -97,5 +98,4 @@ def run():
         update(delta_time)
         draw(delta_time)
 
-        pygame.display.flip()
-        clock.tick(60)
+        clock.tick(framerate)

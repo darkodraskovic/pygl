@@ -4,11 +4,10 @@ from pygl import transform
 class Entity(transform.Transform):
     def __init__(self, shader, mesh):
         super(Entity, self).__init__()
+        shader.set_uniform("uProjection")
+        shader.set_uniform("uView")
+        shader.set_uniform("uModel")
         self.shader = shader
-        self.shader.set_uniform_location("uProjection")
-        self.shader.set_uniform_location("uView")
-        self.shader.set_uniform_location("uModel")
-
         self.mesh = mesh
 
     def update(self, delta_time):
