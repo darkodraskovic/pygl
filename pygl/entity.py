@@ -1,4 +1,4 @@
-import transform
+from pygl import transform
 
 
 class Entity(transform.Transform):

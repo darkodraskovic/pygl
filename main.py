@@ -1,10 +1,10 @@
 import numpy as np
 import glm
 
-import app
-import shader
-import mesh
-import entity
+from pygl import app
+from pygl import shader
+from pygl import mesh
+from pygl import entity
 
 app.init()
 

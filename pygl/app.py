@@ -1,13 +1,16 @@
 import sys
+import os
 import OpenGL.GL as gl
 import pygame
 
-import keyboard as kbd
-import camera as cam
+from pygl import action as act
+from pygl import camera as cam
+
 
 clock = pygame.time.Clock()
 
-size = (800, 600)
+position = (0, 0)
+size = (1152, 720)
 clear_color = (0.5, 0.5, 0.5, 1.0)
 
 camera = cam.Camera()
@@ -18,16 +21,17 @@ EXIT = 0
 
 
 def bind_keys():
-    kbd.bind_key(pygame.K_ESCAPE, EXIT)
-    kbd.bind_key(pygame.K_w, cam.FORWARD)
-    kbd.bind_key(pygame.K_s, cam.BACKWARD)
-    kbd.bind_key(pygame.K_a, cam.LEFT)
-    kbd.bind_key(pygame.K_d, cam.RIGHT)
-    kbd.bind_key(pygame.K_e, cam.UP)
-    kbd.bind_key(pygame.K_q, cam.DOWN)
+    act.bind_key(pygame.K_ESCAPE, EXIT)
+    act.bind_key(pygame.K_w, cam.FORWARD)
+    act.bind_key(pygame.K_s, cam.BACKWARD)
+    act.bind_key(pygame.K_a, cam.LEFT)
+    act.bind_key(pygame.K_d, cam.RIGHT)
+    act.bind_key(pygame.K_e, cam.UP)
+    act.bind_key(pygame.K_q, cam.DOWN)
 
 
 def init():
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % position
     pygame.init()
     gl.glEnable(gl.GL_DEPTH_TEST)
     pygame.display.set_mode(size, pygame.DOUBLEBUF | pygame.OPENGL)
@@ -37,29 +41,33 @@ def init():
 
 def handle_input(delta_time):
     # key pressed
-    kbd.handle_keys()
+    act.handle_keys()
 
-    if kbd.is_pressed(cam.FORWARD):
+    if act.is_pressed(cam.FORWARD):
         camera.translate(cam.FORWARD, delta_time)
-    elif kbd.is_pressed(cam.BACKWARD):
+    elif act.is_pressed(cam.BACKWARD):
         camera.translate(cam.BACKWARD, delta_time)
-    if kbd.is_pressed(cam.LEFT):
+    if act.is_pressed(cam.LEFT):
         camera.translate(cam.LEFT, delta_time)
-    elif kbd.is_pressed(cam.RIGHT):
+    elif act.is_pressed(cam.RIGHT):
         camera.translate(cam.RIGHT, delta_time)
-    if kbd.is_pressed(cam.UP):
+    if act.is_pressed(cam.UP):
         camera.translate(cam.UP, delta_time)
-    elif kbd.is_pressed(cam.DOWN):
+    elif act.is_pressed(cam.DOWN):
         camera.translate(cam.DOWN, delta_time)
 
-    # key up/down
-    for event in kbd.get():
-        if event.type == kbd.KEYDOWN:
+    for event in pygame.event.get():
+        if event.type == act.ACTIONDOWN:
             if event.action == EXIT:
                 pygame.event.post(pygame.event.Event(pygame.QUIT))
-
-    # events
-    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 4:
+                camera.zoom(-1, delta_time)
+            elif event.button == 5:
+                camera.zoom(1, delta_time)
+        if event.type == pygame.MOUSEMOTION:
+            camera.rotate(pygame.mouse.get_rel(), True)
+    # sys
         if event.type == pygame.QUIT:
             sys.exit()
 
