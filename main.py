@@ -13,14 +13,16 @@ sh.use_program()
 sh.set_uniform_location("uColor")
 sh.set_vec("uColor", glm.vec3(0.3, 0.7, 1))
 msh = mesh.Mesh()
-data = np.array([(-1, +1), (+1, +1), (-1, -1), (+1, -1)], dtype=np.float32)
-msh.set_attribute(data)
+vbo = np.array([(-1, -1), (1, -1), (1, 1), (-1, 1)], dtype=np.float32)
+msh.set_attribute(vbo)
+ebo = np.array([0, 1, 2, 0, 2, 3], dtype=np.int32)
+msh.set_indices(ebo)
 
 ent = entity.Entity(sh, msh)
-ent.scale.x = 0.5
-ent.scale.y = 0.5
-ent.rotation.z = glm.quarter_pi()
+ent.rotation.x = -glm.quarter_pi()
 
 app.entities.append(ent)
+# app.camera.position.y = 1
+app.camera.update_vectors()
 
 app.run()

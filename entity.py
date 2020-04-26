@@ -1,28 +1,23 @@
-import glm
+import transform
 
 
-class Entity():
+class Entity(transform.Transform):
     def __init__(self, shader, mesh):
         super(Entity, self).__init__()
         self.shader = shader
+        self.shader.set_uniform_location("uProjection")
+        self.shader.set_uniform_location("uView")
         self.shader.set_uniform_location("uModel")
 
         self.mesh = mesh
-        self.position = glm.vec3(0)
-        self.rotation = glm.vec3(0)
-        self.scale = glm.vec3(1)
 
     def update(self, delta_time):
         pass
 
-    def draw(self):
-        transform = glm.mat4(1)
-        transform = glm.translate(transform, self.position)
-        transform = glm.rotate(transform, self.rotation.x, glm.vec3(1, 0, 0))
-        transform = glm.rotate(transform, self.rotation.y, glm.vec3(0, 1, 0))
-        transform = glm.rotate(transform, self.rotation.z, glm.vec3(0, 0, 1))
-        transform = glm.scale(transform, self.scale)
-
+    def draw(self, proj_mat, view_mat):
+        model_mat = super().draw()
         self.shader.use_program()
-        self.shader.set_mat("uModel", transform)
+        self.shader.set_mat("uProjection", proj_mat)
+        self.shader.set_mat("uView", view_mat)
+        self.shader.set_mat("uModel", model_mat)
         self.mesh.draw()
