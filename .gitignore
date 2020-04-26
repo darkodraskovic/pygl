@@ -1,0 +1,3 @@
+.projectile
+__pycache__/
+pylintrc
