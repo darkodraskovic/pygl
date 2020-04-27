@@ -8,16 +8,19 @@ WORLD_UP = glm.vec3(0, 1, 0)
 YAW = -glm.half_pi()
 PITCH = 0.0
 SPEED = 5.0
-SENSITIVITY = 0.5 * 10e-3
+SENSITIVITY = 0.2 * 10e-3
 ZOOM = glm.quarter_pi()
 ZOOM_SPEED = glm.half_pi()
 ZOOM_MAX = glm.half_pi()
+
 FORWARD = 1
 BACKWARD = 2
 LEFT = 3
 RIGHT = 4
 UP = 5
 DOWN = 6
+ZOOM_IN = 7
+ZOOM_OUT = 8
 
 
 class Camera(transform.Transform):
@@ -39,7 +42,7 @@ class Camera(transform.Transform):
         self.sensitivity = SENSITIVITY
         self.current_zoom = ZOOM
 
-        self.update_vectors()
+        self.__update_vectors()
 
     def get_view_matrix(self):
         return glm.lookAt(self.position, self.position + self.front, self.up)
@@ -47,7 +50,7 @@ class Camera(transform.Transform):
     def get_projection_matrix(self, width, height):
         return glm.perspective(self.current_zoom, width / height, NEAR, FAR)
 
-    def update_vectors(self):
+    def __update_vectors(self):
         front = glm.vec3()
         front.x = glm.cos(self.rotation.y) * glm.cos(self.rotation.x)
         front.y = glm.sin(self.rotation.x)
@@ -78,7 +81,7 @@ class Camera(transform.Transform):
         if (constrain):
             self.rotation.x = glm.clamp(self.rotation.x, -glm.half_pi(), glm.half_pi())
 
-        self.update_vectors()
+        self.__update_vectors()
 
     def zoom(self, direction, delta_time):
         self.current_zoom += direction * ZOOM_SPEED * delta_time

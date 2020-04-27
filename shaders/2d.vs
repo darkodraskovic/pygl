@@ -1,26 +1,17 @@
 #version 330 core
 
-uniform mat4 uProjection;
-uniform mat4 uView;
-uniform mat4 uModel;
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_model;
 
-uniform vec3 uColor;
+uniform vec3 u_color;
 
-layout (location = 0) in vec2 aPosition;
+layout (location = 0) in vec2 a_position;
+
+out vec2 position;
 
 void main()
 {
-    // gl_Position = vec4(aPosition, 0.0, 1.0);
-
-    // or gl_Position.xyzw = vec4(position, 0.0, 1.0);
-
-    // or gl_Position.xy = position;
-    //    gl_Position.zw = vec2(0.0, 1.0);
-
-    // or gl_Position.x = position.x;
-    //    gl_Position.y = position.y;
-    //    gl_Position.z = 0.0;
-    //    gl_Position.w = 1.0;
-
-    gl_Position = uProjection * uView * uModel * vec4(aPosition, 0.0, 1.0);
+    gl_Position = u_projection * u_view * u_model * vec4(a_position, 0.0, 1.0);
+    position = a_position.xy;
 }

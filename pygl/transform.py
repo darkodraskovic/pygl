@@ -8,7 +8,7 @@ class Transform():
         self.rotation = glm.vec3(0)
         self.scale = glm.vec3(1)
 
-    def draw(self):
+    def get_transform(self):
         transform = glm.mat4(1)
         transform = glm.translate(transform, self.position)
         transform = glm.rotate(transform, self.rotation.x, glm.vec3(1, 0, 0))

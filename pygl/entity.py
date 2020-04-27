@@ -4,9 +4,9 @@ from pygl import transform
 class Entity(transform.Transform):
     def __init__(self, shader, mesh):
         super(Entity, self).__init__()
-        shader.set_uniform("uProjection")
-        shader.set_uniform("uView")
-        shader.set_uniform("uModel")
+        shader.set_uniform("u_projection")
+        shader.set_uniform("u_view")
+        shader.set_uniform("u_model")
         self.shader = shader
         self.mesh = mesh
 
@@ -14,9 +14,8 @@ class Entity(transform.Transform):
         pass
 
     def draw(self, proj_mat, view_mat):
-        model_mat = super().draw()
         self.shader.use_program()
-        self.shader.set_mat("uProjection", proj_mat)
-        self.shader.set_mat("uView", view_mat)
-        self.shader.set_mat("uModel", model_mat)
+        self.shader.set_mat("u_projection", proj_mat)
+        self.shader.set_mat("u_view", view_mat)
+        self.shader.set_mat("u_model", super().get_transform())
         self.mesh.draw()
