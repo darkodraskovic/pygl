@@ -43,13 +43,14 @@ def init():
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % position
     pygame.init()
 
-    gl.glEnable(gl.GL_DEPTH_TEST)
+    pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MAJOR_VERSION, 4)
+    pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MINOR_VERSION, 1)
     screen = pygame.display.set_mode(size, pygame.DOUBLEBUF | pygame.OPENGL)
+    gl.glEnable(gl.GL_DEPTH_TEST)
 
     pygame.mouse.set_visible(0)
     pygame.event.set_grab(True)
     bind_keys()
-
     camera.position.z = 3
 
 

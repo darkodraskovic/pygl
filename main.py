@@ -24,7 +24,7 @@ class Entity2(entity.Entity):
 
 app.init()
 
-sh = shader.Shader('shaders/2d.vs', 'shaders/2d_params.fs')
+sh = shader.Shader('2d.vs', '2d_params.fs')
 sh.use_program()
 sh.set_uniform("u_color")
 sh.set_vec("u_color", glm.vec3(0.3, 0.7, 1))
@@ -40,10 +40,5 @@ ent = Entity2(sh, msh)
 ent.size = glm.vec4(-1, -1, 2, 2)
 # ent.rotation.x = -glm.quarter_pi()
 app.entities.append(ent)
-
-
-
-
-
 
 app.run()

@@ -1,18 +1,19 @@
+import re
 import OpenGL.GL as gl
 import glm
 
 
+regexp = "\#include\s+(.*)$"
+
+
 class Shader():
-    def __init__(self, vertex_file, fragment_file):
+    def __init__(self, vertex_file, fragment_file, directory="shader"):
         super(Shader, self).__init__()
+        self.directory = directory
+        self.vertex_src = self.__include(vertex_file)
+        self.fragment_src = self.__include(fragment_file)
 
         self.uniforms = {}
-
-        with open(vertex_file, 'r') as file:
-            self.vertex_src = file.read()
-        with open(fragment_file, 'r') as file:
-            self.fragment_src = file.read()
-
         self.program = gl.glCreateProgram()
         self.vertex_obj = gl.glCreateShader(gl.GL_VERTEX_SHADER)
         self.fragment_obj = gl.glCreateShader(gl.GL_FRAGMENT_SHADER)
@@ -41,6 +42,18 @@ class Shader():
 
         gl.glDetachShader(self.program, self.vertex_obj)
         gl.glDetachShader(self.program, self.fragment_obj)
+
+    def __include(self, file_name):
+        src = ""
+        with open(self.directory + "/" + file_name, 'r') as file:
+            for line in file:
+                if line.startswith("#include"):
+                    m = re.search(regexp, line)
+                    line = open(self.directory + "/lib/"
+                                + m.group(1) + ".glsl", "r").read()
+                src += line
+            file.close()
+        return src
 
     def use_program(self):
         gl.glUseProgram(self.program)
