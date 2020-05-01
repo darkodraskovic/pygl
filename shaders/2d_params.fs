@@ -1,5 +1,7 @@
 #version 330 core
 
+#define PI 3.14159265359
+
 uniform float u_time;
 uniform vec4 u_aabb;
 
@@ -9,22 +11,48 @@ in vec2 position;
 
 vec3 color = vec3(0,0,0);
 
+mat3 translate(float x, float y) {
+    return mat3(1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                -x, -y, 1.0);
+}
+
+mat3 rotate(float angle) {
+    return mat3(cos(angle), -sin(angle), 0.0,
+                sin(angle), cos(angle), 0.0,
+                0.0, 0.0, 1.0);
+}
+
+mat3 scale(float x, float y){
+    return mat3(1/x, 0.0, 0.0,
+                0.0, 1/y, 0.0,
+                0.0, 0.0, 1.0);
+}
+
+float rectangle(vec2 pos, vec2 size, vec2 offset) {
+    pos = step(0 - offset, pos) - step(size - offset, pos);
+    return pos.x * pos.y;
+}
+
 void main()
 {
-    vec2 norm_pos = (position.xy - u_aabb.xy) / u_aabb.zw;
+    vec3 st = vec3((position.xy - u_aabb.xy) / u_aabb.zw, 1.0);
+    vec3 prev_st = st;
     
-    // color = u_color;
-    // color = u_color * abs(sin(u_time));
+    float sin_t = sin(u_time);
+    float cos_t = cos(u_time);
+    float sin_pi = sin_t * PI;
+    float cos_pi = cos_t * PI;
     
-    // color = mix(vec3(1,0,0), vec3(0,0,1), norm_pos.y);
+    prev_st = st;
+    // st = scale(0.4,0.2) * rotate(u_time) * translate(0.3, 0.5) * st;
     
-    // color = vec3(norm_pos, 0.0);
-    // color = vec3(step(vec2(0.75, 0.6), norm_pos), 0.0);
-    // color = vec3(smoothstep(vec2(0.75, 0.6), vec2(0.8, 0.65), norm_pos), 0.0);
-
-    vec2 center = vec2(abs(sin(u_time)), 0.5) - 0.2;
-    vec2 v_diff = norm_pos - center;
-    color.rg = 1.0 - step(vec2(0.2,0.2), v_diff);
+    // st = scale(0.4,0.2) * rotate(0) * translate(0.3, 0.5) * st;
+    st = scale(0.4,0.2) * rotate(PI/7) * translate(0.3, 0.5) * st;
+    color.g += rectangle(st.xy, vec2(0.3,0.2), vec2(0));
+    
+    color.g *= 0.8;
+    st = prev_st;
     
     gl_FragColor = vec4(color, 1.0);
 }
