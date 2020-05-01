@@ -4,8 +4,6 @@ uniform mat4 u_projection;
 uniform mat4 u_view;
 uniform mat4 u_model;
 
-uniform vec3 u_color;
-
 layout (location = 0) in vec2 a_position;
 
 out vec3 v_position;
