@@ -11,7 +11,7 @@ mat3 rotate(float angle) {
 }
 
 mat3 scale(vec2 scl){
-    return mat3(1/scl.x, 0.0, 0.0,
-                0.0, 1/scl.y, 0.0,
+    return mat3(1.0/scl.x, 0.0, 0.0,
+                0.0, 1.0/scl.y, 0.0,
                 0.0, 0.0, 1.0);
 }

@@ -7,10 +7,11 @@ regexp = "\#include\s+(.*)$"
 
 
 class Shader():
-    def __init__(self, vertex_file, fragment_file, dir_name="shader"):
+    def __init__(self, vertex_file, fragment_file,
+                 dir_name="shader", lib_name="lib"):
         super(Shader, self).__init__()
-        vertex_src = Shader.include(vertex_file, dir_name)
-        fragment_src = Shader.include(fragment_file, dir_name)
+        vertex_src = Shader.include(vertex_file, dir_name, lib_name)
+        fragment_src = Shader.include(fragment_file, dir_name, lib_name)
 
         self.uniforms = {}
         self.program = gl.glCreateProgram()
@@ -43,13 +44,13 @@ class Shader():
         gl.glDetachShader(self.program, fragment_obj)
 
     @staticmethod
-    def include(file_name, dir_name):
+    def include(file_name, dir_name, lib_name):
         src = ""
         with open(dir_name + "/" + file_name, 'r') as file:
             for line in file:
                 if line.startswith("#include"):
                     m = re.search(regexp, line)
-                    line = open(dir_name + "/lib/"
+                    line = open(dir_name + "/" + lib_name + "/"
                                 + m.group(1) + ".glsl", "r").read()
                 src += line
             file.close()

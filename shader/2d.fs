@@ -1,8 +1,9 @@
 #version 330 core
 
-uniform vec3 u_color;
+uniform float u_alpha = 1.0;
+uniform vec3 u_color = vec3(0.3, 0.4, 0.5);
 
 void main()
 {
-  gl_FragColor = vec4(u_color, 1.0);    
+  gl_FragColor = vec4(u_color, u_alpha);    
 }

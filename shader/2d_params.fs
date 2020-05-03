@@ -21,7 +21,7 @@ void main()
     // float cos_pi = cos_t * PI;
     
     st = scale(vec2(.4)) * rotate(u_time) * translate(vec2(.3)) * st;
-    color.g += rect(st.xy, vec2(0.3), vec2(0.5));
+    color.g += rect_fill(st.xy, vec2(0.3), vec2(0.5));
     
     color.g *= 0.8;
     st = v_position;

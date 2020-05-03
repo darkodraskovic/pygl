@@ -32,7 +32,8 @@ def is_pressed_any():
 
 def __handle_action(action, is_pressed):
     pressed[action] = is_pressed
-    event = pygame.event.Event(ACTIONDOWN if is_pressed else ACTIONUP, {'action': action})
+    event = pygame.event.Event(ACTIONDOWN if is_pressed else ACTIONUP,
+                               {'action': action})
     pygame.event.post(event)
 
 
