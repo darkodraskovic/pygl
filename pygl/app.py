@@ -19,23 +19,28 @@ class App():
     def __init__(self):
         os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0, 0)
         pygame.init()
-        self.clock = pygame.time.Clock()
+
+        # OpenGL
         self.clear_color = (0.5, 0.5, 0.5, 1.0)
         pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MAJOR_VERSION, 4)
         pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MINOR_VERSION, 1)
         self.screen = pygame.display.set_mode(
             size, pygame.DOUBLEBUF | pygame.OPENGL)
         gl.glEnable(gl.GL_DEPTH_TEST)
-        gl.glEnable(gl.GL_BLEND)
         gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
+        gl.glCullFace(gl.GL_BACK)
+        gl.glFrontFace(gl.GL_CCW)
+
+        self.clock = pygame.time.Clock()
 
         pygame.mouse.set_visible(0)
         pygame.event.set_grab(True)
-
         self.bind_keys()
+
         self.camera = cam.Camera()
         self.camera.position.z = 3
         self.entities = []
+        self.alpha_entities = []
 
     def bind_keys(self):
         # sys
@@ -95,18 +100,23 @@ class App():
 
         proj_mat = self.camera.get_projection_matrix(*size)
         view_mat = self.camera.get_view_matrix()
-        sorted_entities = sorted(
-            self.entities,
+
+        gl.glEnable(gl.GL_CULL_FACE)
+        for e in self.entities:
+            e.draw(proj_mat, view_mat)
+        gl.glDisable(gl.GL_CULL_FACE)
+
+        self.alpha_entities.sort(
             key=lambda e: glm.length(self.camera.position - e.position),
             reverse=True)
-        for e in sorted_entities:
+        gl.glEnable(gl.GL_BLEND)
+        for e in self.alpha_entities:
             e.draw(proj_mat, view_mat)
+        gl.glDisable(gl.GL_BLEND)
 
         pygame.display.flip()
 
     def run(self):
-        global clock
-
         while True:
             delta_time = self.clock.get_time() / 1000
 
